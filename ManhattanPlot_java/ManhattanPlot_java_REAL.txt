@@ -1,0 +1,105 @@
+import grafica.*;
+
+public GPlot plot1;
+PShape mug;
+import java.io.FileNotFoundException;
+String[] chromosomes; 
+final int BOX_COLOR = 245;
+final int POINT_SIZE = 10;
+GPointsArray points1, points2;
+//GPlot plots[] = {plot1, plot2};
+int[] colors = {unhex("1b9e77"), unhex("d95f02"), unhex("7570b3"), unhex("e7298a")};
+/*int[] colors = {Integer.parseInt(""+color(#1b9e77)), Integer.parseInt(""+color(#d95f02)), 
+Integer.parseInt(""+color(#7570b3)), Integer.parseInt(""+color(#d95f02))};*/
+
+
+public void setUpPlot(GPlot plots){
+    plots.setTicksLength(-4);
+    plots.getXAxis().setNTicks(22);
+    plots.getYAxis().getAxisLabel().setText("-log(p value)");
+    plots.setLogScale("xy");
+    plots.setBgColor(255);
+    plots.setBoxBgColor(BOX_COLOR);
+    plots.setLineColor(BOX_COLOR);
+  }
+
+  
+void setup(){
+  /*for(int i:colors){
+    println(i);
+  }*/
+  size(850, 650);
+  chromosomes = new String[22];
+  ProcessFile pfM = null;
+  ProcessFile pfW = null;
+  //pfM = new ProcessFile(loadStrings("HIP_MEN_chr_pos_rs_pval.txt"));
+  pfM = new ProcessFile(loadStrings("someHIP_MEN.txt"));
+  pfW = new ProcessFile(loadStrings("someHIP_MEN.txt"));
+  //pfW = new ProcessFile(loadStrings("HIP_WOMEN_chr_pos_rs_pval.txt"));
+  // pfM = new ProcessFile("ManhattanPlot_java.pde");
+   //pfW = new ProcessFile("ProcessFile.java");
+  for (int i = 0; i < chromosomes.length; i++){
+    chromosomes[i] = (i + 1) + "";
+  }
+  points1 = new GPointsArray(pfM.getSize());
+  points2 = new GPointsArray(pfW.getSize());
+  float maxWYCor = pfW.maxYCor();
+  //println(pfM.hasNext());
+  while (pfM.hasNext()){
+    points1.add(pfM.getXPosn(), maxWYCor + 1 + pfM.getLogP(), pfM.getRsId());
+    pfM.advanceIndex();
+   // println("added a point");
+  }
+
+  while (pfW.hasNext()){
+    points2.add(pfW.getXPosn(), maxWYCor - pfW.getLogP(), pfW.getRsId());
+    pfW.advanceIndex();
+  }
+  println("added points");
+  plot1 = new GPlot(this);
+  //plot.getXAxis().setDrawTickLabels(true);
+  plot1.setPos(new float[]{0, 0});
+  plot1.getXAxis().getAxisLabel().setText("Chromosome");
+  plot1.setPoints(points1);
+  plot1.addLayer("Women", points2);
+  plot1.getLayer("Women").setLineColor(BOX_COLOR);
+  plot1.getTitle().setText("Manhattan plot");
+  println("set the plots");
+  setUpPlot(plot1);
+  println("set the stuff up");
+  //plot.activatePointLabels();
+  plot1.defaultDraw();
+  println("default draw!");
+  /*for (int i = 0; i < points1.getNPoints(); i++){
+    plot.drawPoint(points1.get(i), -1 * colors[(int)(points1.get(i).getX())%4], POINT_SIZE); 
+  }*/
+  noLoop();
+}
+
+public void draw(){
+  background(255);
+  plot1.beginDraw();
+ 
+  //plot1.drawPoints();
+  //plot1.getLayer("Women").drawPoints();
+  plot1.drawBox();
+    plot1.drawXAxis();
+    plot1.drawYAxis();
+    plot1.drawTitle();
+    plot1.drawGridLines(GPlot.VERTICAL);
+    //plot.drawGridLines(GPlot.VERTICAL);
+    //plot.drawFilledContours(GPlot.HORIZONTAL, 0);
+    //plot.drawLegend(new String[] {"Oktoberfest", "Bundestagswahl"}, new float[] {0.07, 0.22}, 
+           //         new float[] {0.92, 0.92});
+   // println(points1.getNPoints());
+    
+    //plot.drawPoints();
+    //plot.drawLabels();
+     for (int i = 0; i < points1.getNPoints(); i++){
+      plot1.drawPoint(points1.get(i), -1 * colors[(int)(points1.get(i).getX())%4], POINT_SIZE); 
+    }
+    for (int i = 0; i < points2.getNPoints(); i++){
+      plot1.getLayer("Women").drawPoint(points2.get(i), -1 * colors[(int)(points2.get(i).getX())%4], POINT_SIZE); 
+    }
+    plot1.endDraw();
+}
