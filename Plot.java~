@@ -1,0 +1,8 @@
+package invertedmanhattan;
+import processing.core.*;
+
+public class Plot{
+    private int constant;
+    private Label trait;
+    private float scale;
+}
