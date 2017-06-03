@@ -16,5 +16,14 @@ public class Label {
 		name = n;
 		this.x = x;
 		this.y = y;
+		visible = true;
+	}
+	
+	public void toggleVisibility(){
+		visible = !visible;
+	}
+	
+	public void setFont(PFont f){
+		font = f;
 	}
 }

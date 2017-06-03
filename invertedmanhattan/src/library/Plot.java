@@ -9,7 +9,7 @@ public class Plot implements PConstants{
     private Label trait;
     private float scale;
     private Axis xAxis, yAxis;
-    private ArrayList<Point> points;
+    protected ArrayList<Point> points;
     
     public Plot(PApplet parent, int c, Label t){
     	this.parent = parent;
