@@ -4,7 +4,7 @@ package library;
 public class Axis {
 	protected Label name;
 	protected float x, y, maxX, maxY; //assume all Axes are horizontal: will be rotated if not
-	protected float[] ticks;
+	private float[] ticks;
 	protected Label[] tickNames;
 	protected float angle;
 	protected float tickLen;
@@ -12,6 +12,7 @@ public class Axis {
 	protected boolean isXAxis;
 	protected float xScale, yScale;
 	protected boolean isVisible;
+	protected boolean uniformTicks;
 	
 	protected static float axisLabelMargin = 4;
 	protected static float axisTickNameMargin = 1;
@@ -23,17 +24,18 @@ public class Axis {
 		maxX = x2;
 		maxY = y2;
 		name = new Label("", (x1+x2+marginX)/2, (y1+y2+marginY)/2);
-		this.angle = angle;
-		name.angle = angle;
+		//this.angle = angle;
+		//name.angle = angle;
 		isXAxis = y1 == y2;
 	}
 	
 	public boolean setNTicks(int n){
+		uniformTicks = true;
 		if (n <= 0){
 			return false;
 		}
 		ticks = new float[n];
-		float increments = (x + maxX)/n;
+		float increments = (maxX - x)/n;
 		for (int i = 0; i < n; i++){
 			ticks[i] = increments * i;
 		}
@@ -87,5 +89,21 @@ public class Axis {
 			tickNames[j] = makeTickName(j, names[j]);
 			j++;
 		}
+	}
+	
+	public void setTicks(float[] t){
+		uniformTicks = false;
+		ticks = new float[t.length];
+		for (int i = 0; i < t.length; i++){
+			ticks[i] = t[i];
+		}
+	}
+	
+	public float[] getTicks(){
+		float[] newTicks = new float[ticks.length];
+		for (int i = 0; i < newTicks.length; i++){
+			newTicks[i] = ticks[i];
+		}
+		return newTicks;
 	}
 }

@@ -21,7 +21,7 @@ public class Plot implements PConstants{
     	width = w;
     	height = h;
     	points = new ArrayList<Point>();
-    	xAxis = new Axis(marginX, marginY, x, y, x+width, y, 0);
+    	xAxis = new Axis(marginX, marginY, x, y+height, x+width, y+height, 0);
     	yAxis = new Axis(marginX, marginY, x, y, x, y+height, PConstants.PI/2);
     }
     
@@ -36,7 +36,7 @@ public class Plot implements PConstants{
     
     public void addPoints(){
     	while (pF.hasNext()){
-    		points.add(new Point(pF.getXPosn(), pF.getLogP()));
+    		points.add(new Point(pF.getXPosn(), pF.getLogP(), pF.getChromosome(), constant));
     		pF.advanceIndex();
     	}
     	System.out.println("added points");

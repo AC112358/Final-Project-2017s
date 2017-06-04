@@ -15,9 +15,10 @@ public class Point {
 		constant = 1;
 	}
 	
-	public Point(float x, float y, int chr){
+	public Point(float x, float y, int chr, int c){
 		this(x, y);
 		chromosome = chr;
+		constant = c;
 	}
 	
 	public Point(float x, float y, int clr, int size, int c){

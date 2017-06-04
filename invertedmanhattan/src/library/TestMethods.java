@@ -13,8 +13,19 @@ public class TestMethods extends PApplet{
 	
 	public void setup(){
 		//PApplet p, float w, float h, float x, float y
+		int[] colors = new int[25];
+		for (int i = 0; i < colors.length; i++){
+			if (i % 3 == 0){
+				colors[i] = color(53, 95, 180);
+			}else if (i % 3 == 1){
+				colors[i] = color(53, 180, 142);
+			}else{
+				colors[i] = color(180, 70, 53);
+			}
+		}
 		try {
-			c = new Container(this, 500, 500, 10, 10, "someHIP_MEN.txt", "someHIP_MEN.txt");
+			c = new Container(this, 500, 500, 50, 50, "someHIP_MEN.txt", "someHIP_MEN.txt");
+			c.setPointColors(colors);
 			//System.out.println("done w/setup");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

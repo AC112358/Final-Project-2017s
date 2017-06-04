@@ -22,27 +22,39 @@ public class SearchDatabase {
 			BufferedReader in = new BufferedReader(new FileReader(refFile));
 			Connection myConn = DriverManager.getConnection(url, user, pw);
 			Statement stmnt = (Statement) myConn.createStatement();
-			String sql = "insert into refsnps.reftable4 " + 
-			"(rs_id, chromosome, bp_position)"
+			String pt1 = "insert into refsnps2.reftable"; 
+			String pt2 = "(rs_id, chromosome, bp_position)"
 			+ " values (";
 			in.readLine();
 			String line = in.readLine();
 			String[] tokens;
 			int index = 2;
+			int oldNum = index;
+			int tableNum = 0;
 			while (line != null){
 				tokens = line.split("\\s+");
 				try{
-					if (index >= 1210000){
+					if (index < oldNum + 300000){
 						String location = "'" + tokens[tokens.length-2] + "'" + ", '" + tokens[tokens.length-1] + "'";
 						//lines.put(tokens[1], location);
 						/*ADD TO DATABASE*/
-						location = sql + "'" + tokens[1] + "', " + location + ")";
+						location = pt1 + tableNum + " " + pt2 + "'" + tokens[1] + "', " + location + ")";
 						/*if (index < 25){
 							System.out.println("Will execute " +  location);
 						}*/
 						stmnt.executeUpdate(location);
+					}else{
+						tableNum++;
+						System.out.println("On table # " + tableNum);
+						oldNum = index - 50000;
+						String cmd = "CREATE TABLE `refsnps2`.`reftable`"+tableNum+" ("+
+								  "`rs_id` VARCHAR(45) NOT NULL,"+
+								  "`chromosome` VARCHAR(2) NOT NULL,"+
+								  "`bp_position` VARCHAR(45) NOT NULL,"+
+								  "PRIMARY KEY (`rs_id`),"+
+								  "UNIQUE INDEX `rs_id_UNIQUE` (`rs_id` ASC))";
+						stmnt.executeUpdate(cmd);
 					}
-				
 				}catch(Exception e){
 					if (verbose){
 						System.out.println(lineInvalidMsg(index));
@@ -53,6 +65,7 @@ public class SearchDatabase {
 				line = in.readLine();
 				index++;
 			}
+			System.out.println(index);
 			in.close();
 		}catch(Exception e){
 			e.printStackTrace();

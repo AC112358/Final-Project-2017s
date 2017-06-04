@@ -3,6 +3,7 @@ package library;
 import java.io.IOException;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 
 public class Container {
 	private PApplet parent;
@@ -31,15 +32,16 @@ public class Container {
     	middleLabel = new Label("-log(p)", 0, 0);
     	middleLabel.angle = (float)(Math.PI);
     	
-    	title = new Label("Inverted Manhattan plot", (x+w)/2, y);
+    	title = new Label("Inverted Manhattan plot", x, y);//0, 0);//x + w/2, y);
     	
     	up = new Plot(1, x, y, width, height/2);
-    	down = new Plot(-1, x, y+h, width, height/2);
+    	down = new Plot(-1, x, y + height/2, width, height/2);
     	up.pF = new ProcessFile(fName1);
     	down.pF = new ProcessFile(fName2);
-    	down.xAxis.isVisible = false;
-    	up.xAxis.ticks = ProcessFile.fullLengths;
-    	down.xAxis.ticks = up.xAxis.ticks;
+    	//down.xAxis.isVisible = false;
+    	up.xAxis.setTicks(ProcessFile.fullLengths);
+    	down.xAxis.setTicks(ProcessFile.fullLengths);
+    	//down.yAxis.isVisible = false;
     	
     	String[] chrNames = chromosomeNames();
     	
@@ -128,26 +130,32 @@ public class Container {
     	
     	double totalY = Math.max(up.pF.maxYCor(), down.pF.maxYCor());
     	if (totalY != 0){
-    		yScale = (float) (height/totalY);
+    		yScale = (float) (.5*height/totalY);
     	}
     }
     
     private float relY(float addY){
-    	return (y+height)/2 - yScale*addY;
+    	return y + height/2 - yScale*addY;
     }
     
     private float relX(float addX){
     	return x + xScale*addX;
     }
     
-    public void drawPoints(){
+    private void drawPoints(Plot plt){
     	parent.pushMatrix();
-    	for (Point p : up.points){
+    	parent.noStroke();
+    	for (Point p : plt.points){
     		int color = p.getColor();
     		parent.fill(color);
-    		parent.ellipse(relX(p.xRel) , relY(p.constant * p.yRel), p.getRadius(), p.getRadius());
+    		parent.ellipse(relX(p.xRel), relY(p.constant * p.yRel), p.getRadius(), p.getRadius());
     	}	
     	parent.popMatrix();
+    }
+    
+    public void drawPoints(){
+    	drawPoints(up);
+    	drawPoints(down);
     }
     
     
@@ -155,12 +163,16 @@ public class Container {
     	if (axis.isVisible){
 	    	parent.fill(0);
 	    	parent.line(axis.x, axis.y, axis.maxX, axis.maxY);
-	    	for (float xVal : axis.ticks){
+	    	for (float xVal : axis.getTicks()){
 	        	parent.pushMatrix();
 	        	parent.fill(0);
-	        	parent.translate(relX(xVal), relY(axis.tickLen/2));
-	        	parent.rotate(axis.angle);
-	    		parent.line(relX(xVal), relY(0), relX(xVal), relY(axis.tickLen));
+	        	parent.translate(xVal, relX(axis.tickLen/2));
+	        	parent.rotate(axis.angle + PConstants.PI/2);
+	        	if (axis.uniformTicks){
+	        		parent.line(xVal, relY(0), relX(xVal), relY(axis.tickLen));
+	        	}else{
+	        		parent.line(relX(xVal), relY(0), relX(xVal), relY(axis.tickLen));
+	        	}
 	    		parent.popMatrix();
 	    	}
     	}
@@ -185,20 +197,20 @@ public class Container {
     	drawLabel(down.yAxis.name);
     	drawLabel(down.trait);
     	for (Label l : up.xAxis.tickNames){
-    		drawLabel(l);
+    		drawLabel(l, up.xAxis.uniformTicks);
     	}
     	for (Label l : down.xAxis.tickNames){
-    		drawLabel(l);
+    		drawLabel(l, down.xAxis.uniformTicks);
     	}
     	for (Label l : up.yAxis.tickNames){
-    		drawLabel(l);
+    		drawLabel(l, up.yAxis.uniformTicks);
     	}
     	for (Label l : down.yAxis.tickNames){
-    		drawLabel(l);
+    		drawLabel(l, down.yAxis.uniformTicks);
     	}
     }
     
-    private void drawLabel(Label label){
+    private void drawLabel(Label label, boolean uniform){
     	if (label.isVisible() && label.name != null){
 	    	parent.pushMatrix();
 	    	parent.translate(label.x, label.y);
@@ -208,14 +220,24 @@ public class Container {
 	    		parent.textFont(label.font);
 	    	}
 	    	//System.out.println(label + " " + label.name + " " + label.x + " " + label.y);
-	    	parent.text(label.name, label.x, label.y);
+	    	if (uniform){
+	    		parent.text(label.name, label.x, label.y);
+	    	}else{
+	    		parent.text(label.name, relX(label.x), relY(label.y));
+	    	}
 	    	parent.popMatrix();
     	}
     }
     
+    private void drawLabel(Label label){
+    	drawLabel(label, true);
+    }
+    
+   
+    
     public void drawVertLines(){
-    	for (float xVal : up.xAxis.ticks){
-    		parent.line(relX(xVal), -height, relX(xVal), relY(up.xAxis.tickLen));
+    	for (float xVal : up.xAxis.getTicks()){
+    		parent.line(relX(xVal), y + height, relX(xVal), y);
     	}
     }
     
@@ -248,6 +270,7 @@ public class Container {
     
     public void drawPlot(){
     	drawVertLines();
+    	parent.fill(0);
     	drawLabels();
     	drawAxes();
     	drawPoints();
