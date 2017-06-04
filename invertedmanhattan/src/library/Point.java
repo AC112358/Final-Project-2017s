@@ -2,10 +2,11 @@ package library;
 
 public class Point {
 	protected float xRel, yRel;
-	private int r, g, b;
+	protected int color;
 	private float radius;
 	private Label label;
 	protected int constant;
+	protected int chromosome;
 	
 	public Point(float x, float y){
 		xRel = x;
@@ -14,22 +15,28 @@ public class Point {
 		constant = 1;
 	}
 	
-	public Point(float x, float y, int red, int green, int blue, int size, int c){
+	public Point(float x, float y, int chr){
 		this(x, y);
-		r = red;
-		g = green;
-		b = blue;
+		chromosome = chr;
+	}
+	
+	public Point(float x, float y, int clr, int size, int c){
+		this(x, y);
+		color = clr;
 		constant = c;
 	}
 	
-	public Point(float x, float y, int red, int green, int blue, int size, int c, Label name){
-		this(x, y, red, green, blue, size, c);
+	public Point(float x, float y, int clr, int size, int c, Label name){
+		this(x, y, clr, size, c);
 		label = name;
 	}
 	
-	public int[] getColor(){
-		int[] colors = {r, g, b};
-		return colors;
+	public int getColor(){
+		return color;
+	}
+	
+	public void setColor(int clr){
+		color = clr;
 	}
 	
 	public float getRadius(){

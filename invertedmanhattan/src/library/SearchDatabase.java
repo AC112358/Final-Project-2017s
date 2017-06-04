@@ -22,7 +22,7 @@ public class SearchDatabase {
 			BufferedReader in = new BufferedReader(new FileReader(refFile));
 			Connection myConn = DriverManager.getConnection(url, user, pw);
 			Statement stmnt = (Statement) myConn.createStatement();
-			String sql = "insert into refsnps.reftable " + 
+			String sql = "insert into refsnps.reftable4 " + 
 			"(rs_id, chromosome, bp_position)"
 			+ " values (";
 			in.readLine();
@@ -32,15 +32,16 @@ public class SearchDatabase {
 			while (line != null){
 				tokens = line.split("\\s+");
 				try{
-					String location = "'" + tokens[tokens.length-2] + "'" + ", '" + tokens[tokens.length-1] + "'";
-					//lines.put(tokens[1], location);
-					/*ADD TO DATABASE*/
-					location = sql + "'" + tokens[1] + "', " + location + ")";
-					/*if (index < 25){
-						System.out.println("Will execute " +  location);
-					}*/
-					stmnt.executeUpdate(location);
-					
+					if (index >= 1210000){
+						String location = "'" + tokens[tokens.length-2] + "'" + ", '" + tokens[tokens.length-1] + "'";
+						//lines.put(tokens[1], location);
+						/*ADD TO DATABASE*/
+						location = sql + "'" + tokens[1] + "', " + location + ")";
+						/*if (index < 25){
+							System.out.println("Will execute " +  location);
+						}*/
+						stmnt.executeUpdate(location);
+					}
 				
 				}catch(Exception e){
 					if (verbose){

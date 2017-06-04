@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 public class ProcessFile{
 	private File file;
+	protected String name;
 	private ArrayList<Integer> chrs;
 	private ArrayList<Integer> posns;
 	private ArrayList<String> rsIds;
@@ -17,12 +18,12 @@ public class ProcessFile{
 	private int index;
 	private int tenPow;
 	private int minPValIndex;
-	private static double[] chromosomeLengths = {0, 248956422, 242193529, 198295559, 190214555, 
+	protected static double[] chromosomeLengths = {0, 248956422, 242193529, 198295559, 190214555, 
     		181538259, 170805979, 159345973, 145138636, 138394717, 
     		133797422, 135086622, 133275309, 114364328, 107043718, 
     		101991189, 90338345, 83257441, 80373285, 58617616, 64444167,
-    		46709983, 50818468}; //156040895, 57227415 for X & Y
-	private static double[] fullLengths;
+    		46709983, 50818468, 156040895, 57227415};// for X & Y
+	protected static float[] fullLengths;
 	private static final float DIV_BY = (float)Math.pow(10, 8);
 	
 	
@@ -35,15 +36,16 @@ public class ProcessFile{
 	    rsIds = new ArrayList<String>();
 	    pVals = new ArrayList<Double>();
 	    file = null;
-	    fullLengths = new double[25]; //23 if no X & Y
+	    fullLengths = new float[25]; //23 if no X & Y
 	    fullLengths[0] = 0;
 	    for (int i = 1; i < fullLengths.length; i++){
-	    	fullLengths[i] = fullLengths[i-1] + chromosomeLengths[i]/DIV_BY;
+	    	fullLengths[i] = (float) (fullLengths[i-1] + chromosomeLengths[i]/DIV_BY);
 	    }
 }
  
 	public ProcessFile(String fileName, float reject, float prob) throws IOException{
 		this();
+		name = fileName;
 		file = new File(fileName);
 		extractInfo(reject, prob);
 	}
@@ -81,6 +83,7 @@ public class ProcessFile{
 	}
 	
 	public void extractInfo(float reject, float prob) throws IOException{
+		//System.out.println("extracting info");
 		boolean addToLists = true;
 		String[] tokens;
 		BufferedReader in = new BufferedReader(new FileReader(file));
@@ -133,6 +136,7 @@ public class ProcessFile{
 	public boolean hasNext(){
 		return index < rsIds.size();
 	}
+	
 	public void advanceIndex(){
 		index++;
 	}

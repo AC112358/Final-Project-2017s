@@ -1,26 +1,33 @@
 package library;
 
-import processing.core.PApplet;
 import processing.core.PFont;
 
 public class Label {
-	PApplet parent;
-	private String name;
-	private float rotation;
-	private float x, y;
+	protected String name;
+	protected float angle;
+	protected float x, y;
 	private boolean visible;
-	private PFont font;
+	protected PFont font;
+	protected int size;
 	
-	public Label(PApplet p, String n, float x, float y){
-		parent = p;
+	public Label(String n, float x, float y){
 		name = n;
 		this.x = x;
 		this.y = y;
 		visible = true;
+		size = 8;
+	}
+	
+	public void setSize(int s){
+		size = s;
 	}
 	
 	public void toggleVisibility(){
 		visible = !visible;
+	}
+	
+	public boolean isVisible(){
+		return visible;
 	}
 	
 	public void setFont(PFont f){
