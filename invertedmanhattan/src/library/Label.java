@@ -6,7 +6,7 @@ public class Label {
 	protected String name;
 	protected float angle;
 	protected float x, y;
-	private boolean visible;
+	protected boolean visible;
 	protected PFont font;
 	protected int size;
 	

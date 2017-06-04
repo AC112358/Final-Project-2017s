@@ -17,7 +17,7 @@ public class Plot implements PConstants{
     
     public Plot(int c, float x, float y, float w, float h){
     	constant = c;
-    	trait = new Label("", (float)(.75*(x+w)), (float)(.75*(y+h)));
+    	trait = new Label("", (float)(x + .75*w), (float)(y + h - constant*.25*h));
     	width = w;
     	height = h;
     	points = new ArrayList<Point>();

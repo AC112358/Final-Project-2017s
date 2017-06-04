@@ -7,7 +7,7 @@ public class Axis {
 	private float[] ticks;
 	protected Label[] tickNames;
 	protected float angle;
-	protected float tickLen;
+	protected float tickLen = 1;
 	protected float marginX, marginY;
 	protected boolean isXAxis;
 	protected float xScale, yScale;
@@ -23,7 +23,7 @@ public class Axis {
 		y = y1;
 		maxX = x2;
 		maxY = y2;
-		name = new Label("", (x1+x2+marginX)/2, (y1+y2+marginY)/2);
+		name = new Label("", (x1 + x2 + marginX)/2, (y1 + y2 + marginY)/2);
 		//this.angle = angle;
 		//name.angle = angle;
 		isXAxis = y1 == y2;

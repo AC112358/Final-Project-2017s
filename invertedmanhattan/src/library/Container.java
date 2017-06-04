@@ -50,7 +50,11 @@ public class Container {
     	
     	up.xAxis.setTickNames(chrNames);
     	down.xAxis.setTickNames(chrNames);
+    	up.trait.name = "Trait 1";
+    	down.trait.name = "Trait 2";
     	
+    	
+    	bgColor = 209;
     	
     	makeMiddleLabel();
     	setScales();
@@ -169,7 +173,7 @@ public class Container {
 	        	parent.translate(xVal, relX(axis.tickLen/2));
 	        	parent.rotate(axis.angle + PConstants.PI/2);
 	        	if (axis.uniformTicks){
-	        		parent.line(xVal, relY(0), relX(xVal), relY(axis.tickLen));
+	        		parent.line(xVal, relY(0), xVal, relY(axis.tickLen));
 	        	}else{
 	        		parent.line(relX(xVal), relY(0), relX(xVal), relY(axis.tickLen));
 	        	}
@@ -243,19 +247,19 @@ public class Container {
     
     public void drawVertLines(int color){
     	parent.pushMatrix();
-    	parent.fill(color);
+    	parent.stroke(color);
     	drawVertLines();
     	parent.popMatrix();
     }
     
     
-    public void drawHorizLine(int yVal){
-    	parent.line(x, relY(yVal), x+width, relY(yVal));
+    public void drawHorizLine(float yVal){
+    	parent.line(x, relY(yVal), x + width, relY(yVal));
     }
     
-    public void drawHorizLine(int y, int color){
+    public void drawHorizLine(float y, int color){
     	parent.pushMatrix();
-    	parent.fill(color);
+    	parent.stroke(color);
     	drawHorizLine(y);
     	parent.popMatrix();
     }
@@ -269,10 +273,19 @@ public class Container {
     }
     
     public void drawPlot(){
-    	drawVertLines();
+    	parent.pushMatrix();
+    	parent.fill(bgColor);
+    	parent.noStroke();
+    	parent.rect(x, y, x + width, y + height);
+    	parent.stroke(0);
+    	
+    	drawVertLines(255);
     	parent.fill(0);
     	drawLabels();
+    	
+    	parent.stroke(0);
     	drawAxes();
     	drawPoints();
+    	parent.popMatrix();
     }
 }

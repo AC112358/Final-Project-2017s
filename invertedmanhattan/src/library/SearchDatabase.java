@@ -31,6 +31,14 @@ public class SearchDatabase {
 			int index = 2;
 			int oldNum = index;
 			int tableNum = 0;
+			/*String cmd = "CREATE TABLE refsnps2.reftable"+tableNum+" ("+
+					  "rs_id VARCHAR(45) NOT NULL, "+
+					  "chromosome VARCHAR(2) NOT NULL,"+
+					  "bp_position VARCHAR(45) NOT NULL,"+
+					  "PRIMARY KEY (rs_id), "+
+					  "UNIQUE INDEX rs_id_UNIQUE (rs_id ASC))";
+			stmnt.executeUpdate(cmd);*/
+			String cmd = "";
 			while (line != null){
 				tokens = line.split("\\s+");
 				try{
@@ -46,13 +54,13 @@ public class SearchDatabase {
 					}else{
 						tableNum++;
 						System.out.println("On table # " + tableNum);
-						oldNum = index - 50000;
-						String cmd = "CREATE TABLE `refsnps2`.`reftable`"+tableNum+" ("+
-								  "`rs_id` VARCHAR(45) NOT NULL,"+
-								  "`chromosome` VARCHAR(2) NOT NULL,"+
-								  "`bp_position` VARCHAR(45) NOT NULL,"+
-								  "PRIMARY KEY (`rs_id`),"+
-								  "UNIQUE INDEX `rs_id_UNIQUE` (`rs_id` ASC))";
+						oldNum = index;// - 50000;
+						cmd = "CREATE TABLE refsnps2.reftable"+tableNum+" ("+
+								  "rs_id VARCHAR(45) NOT NULL, "+
+								  "chromosome VARCHAR(2) NOT NULL,"+
+								  "bp_position VARCHAR(45) NOT NULL,"+
+								  "PRIMARY KEY (rs_id), "+
+								  "UNIQUE INDEX rs_id_UNIQUE (rs_id ASC))";
 						stmnt.executeUpdate(cmd);
 					}
 				}catch(Exception e){

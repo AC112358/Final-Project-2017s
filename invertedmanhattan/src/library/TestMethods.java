@@ -26,6 +26,7 @@ public class TestMethods extends PApplet{
 		try {
 			c = new Container(this, 500, 500, 50, 50, "someHIP_MEN.txt", "someHIP_MEN.txt");
 			c.setPointColors(colors);
+			//c.setBGColor(color(0, 255, 213));
 			//System.out.println("done w/setup");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -34,8 +35,10 @@ public class TestMethods extends PApplet{
 	}
 	
 	public void draw(){
-		c.drawPlot();
-		c.drawHorizLine(3);
+		//c.drawPlot();
+		//c.drawHorizLine(1, color(180, 70, 53));
+		//c.drawVertLines(color(180, 70, 53));
+		c.drawAxes();
 	}
 	
 	public static void main(String[] args){
