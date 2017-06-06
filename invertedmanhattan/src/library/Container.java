@@ -16,6 +16,7 @@ public class Container {
     private boolean drawLabels;
     private Label title, middleLabel;
     private float middleLabelMargin = 5;
+    private double totalY;
     
     
     public Container(PApplet p, float w, float h, float x, float y, String fName1, String fName2) throws IOException{
@@ -58,6 +59,7 @@ public class Container {
     	makeMiddleLabel();
     	setScales();
     	setUpPoints();
+    	setHeight((float)(totalY*1.1));
     }
     
     public String[] chromosomeNames(){
@@ -131,7 +133,11 @@ public class Container {
     	double totalX = ProcessFile.fullLengths[ProcessFile.fullLengths.length - 1];
     	xScale = (float) (width/totalX);
     	
-    	double totalY = Math.max(up.pF.maxYCor(), down.pF.maxYCor());
+    	totalY = Math.max(up.pF.maxYCor(), down.pF.maxYCor());
+    	updateYScale();
+    }
+    
+    private void updateYScale(){
     	if (totalY != 0){
     		yScale = (float) (.5*height/totalY);
     	}
@@ -337,6 +343,11 @@ public class Container {
     
     public int getBGColor(){
     	return bgColor;
+    }
+    
+    public void setHeight(float height){
+    	totalY = height;
+    	updateYScale();
     }
     
     public void drawPlot(){
