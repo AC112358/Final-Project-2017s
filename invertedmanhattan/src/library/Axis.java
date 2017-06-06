@@ -7,39 +7,57 @@ public class Axis {
 	private float[] ticks;
 	protected Label[] tickNames;
 	protected float angle;
-	protected float tickLen = 1;
+	protected float tickLen;
 	protected float marginX, marginY;
 	protected boolean isXAxis;
 	protected float xScale, yScale;
 	protected boolean isVisible;
 	protected boolean uniformTicks;
+	protected boolean showTicks;
+	protected float major1, major2;
 	
 	protected static float axisLabelMargin = 4;
 	protected static float axisTickNameMargin = 1;
 
 	public Axis(float marginX, float marginY, float x1, float y1, float x2, float y2, float angle){
 		isVisible = true;
+		showTicks = true;
 		x = x1;
 		y = y1;
 		maxX = x2;
 		maxY = y2;
 		name = new Label("", (x1 + x2 + marginX)/2, (y1 + y2 + marginY)/2);
-		//this.angle = angle;
-		//name.angle = angle;
+		this.angle = angle;
+		//name.angle = angle;	
 		isXAxis = y1 == y2;
+		major1 = y;
+		major2 = maxY;
+		if (isXAxis){
+			major1 = x;
+			major2 = maxX;
+		}
 	}
 	
 	public boolean setNTicks(int n){
-		uniformTicks = true;
-		if (n <= 0){
+		if (n < 0){
 			return false;
 		}
-		ticks = new float[n];
-		float increments = (maxX - x)/n;
-		for (int i = 0; i < n; i++){
-			ticks[i] = increments * i;
-		}
+		uniformTicks = true;
 		
+		if (n == 0){
+			ticks = new float[0];
+		}
+		else if (n == 1){
+			ticks = new float[1];
+			ticks[0] = (major2 + major1)/2;
+		}
+		else{
+			ticks = new float[n];
+			float increments = (major2 - major1)/(n-1);
+			for (int i = 0; i < n; i++){
+				ticks[i] = major1 + increments * i;
+			}
+		}
 		if (tickNames == null){
 			setTickNamesToTickVal();
 		}

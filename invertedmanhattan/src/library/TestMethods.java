@@ -26,6 +26,7 @@ public class TestMethods extends PApplet{
 		try {
 			c = new Container(this, 500, 500, 50, 50, "someHIP_MEN.txt", "someHIP_MEN.txt");
 			c.setPointColors(colors);
+			//System.out.println(c.up.xAxis.isVisible);
 			//c.setBGColor(color(0, 255, 213));
 			//System.out.println("done w/setup");
 		} catch (IOException e) {
@@ -35,10 +36,19 @@ public class TestMethods extends PApplet{
 	}
 	
 	public void draw(){
-		//c.drawPlot();
-		//c.drawHorizLine(1, color(180, 70, 53));
+		c.drawPlot();
+		c.drawHorizLine(1, color(180, 70, 53));
+
 		//c.drawVertLines(color(180, 70, 53));
-		c.drawAxes();
+    	//c.down.yAxis.isVisible = false;
+    	//c.up.yAxis.isVisible = false;
+		//c.up.xAxis.isVisible = false;
+		//c.down.xAxis.isVisible = false;
+	//	c.drawAxis(c.up.xAxis);
+		//c.drawAxis(c.down.yAxis);
+		//c.drawAxis(c.up.yAxis);
+		//c.drawAxis(c.down.yAxis);
+		//c.drawAxes();
 	}
 	
 	public static void main(String[] args){

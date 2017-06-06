@@ -23,6 +23,9 @@ public class Plot implements PConstants{
     	points = new ArrayList<Point>();
     	xAxis = new Axis(marginX, marginY, x, y+height, x+width, y+height, 0);
     	yAxis = new Axis(marginX, marginY, x, y, x, y+height, PConstants.PI/2);
+    	//yAxis = new Axis(marginX, marginY, y, y+height, y+height, y+height, 3*PConstants.PI/2);
+    	xAxis.tickLen = height/100;
+    	yAxis.tickLen = width/100;
     }
     
    /* public Plot(int c, float x, float y, float w, float h, Label t){
@@ -39,7 +42,7 @@ public class Plot implements PConstants{
     		points.add(new Point(pF.getXPosn(), pF.getLogP(), pF.getChromosome(), constant));
     		pF.advanceIndex();
     	}
-    	System.out.println("added points");
+    	//System.out.println("added points");
     }
      
     

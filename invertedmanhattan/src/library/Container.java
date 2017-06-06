@@ -9,7 +9,7 @@ public class Container {
 	private PApplet parent;
     private float width, height;
     private float x, y;
-    private Plot up, down;
+    protected Plot up, down;
     private int bgColor;
     private float xScale;
     private float yScale;
@@ -41,7 +41,6 @@ public class Container {
     	//down.xAxis.isVisible = false;
     	up.xAxis.setTicks(ProcessFile.fullLengths);
     	down.xAxis.setTicks(ProcessFile.fullLengths);
-    	//down.yAxis.isVisible = false;
     	
     	String[] chrNames = chromosomeNames();
     	
@@ -163,24 +162,92 @@ public class Container {
     }
     
     
+    public void drawXAxis(Axis axis){
+		parent.pushStyle();
+    	if (axis.showTicks){
+    		parent.fill(0);
+    		for (float xVal : axis.getTicks()){
+	    		if (axis.uniformTicks){
+	        		parent.line(xVal, axis.y, xVal, axis.y + axis.tickLen);
+	        		//System.out.println(xVal + " " + relY(0) + " " + (axis.y + axis.tickLen) + " " + axis.tickLen);
+		        }else{
+	        		parent.line(relX(xVal), axis.y, relX(xVal), axis.y - axis.tickLen);
+	        		//System.out.println(relY(0) + " " + (axis.y - axis.tickLen) + " " + axis.tickLen);
+	        	}
+    		}
+    	}
+    	parent.popStyle();
+    }
+    
+    public void drawYAxis(Axis axis){
+		parent.pushStyle();
+    	if (axis.showTicks){
+    		parent.fill(0);
+    		for (float yVal : axis.getTicks()){
+	    		if (axis.uniformTicks){
+	        		parent.line(axis.x, yVal, axis.x + axis.tickLen, yVal);
+	        		//System.out.println(axis.x + " " + yVal + " " + (axis.x + axis.tickLen) + " " + yVal);
+		        }else{
+	        		parent.line(axis.x, relY(yVal), axis.x + axis.tickLen, relY(yVal));
+	        		//System.out.println(relY(0) + " " + (axis.y - axis.tickLen) + " " + axis.tickLen);
+	        	}
+    		}
+    	}
+    	parent.popStyle();
+    }
+    
     public void drawAxis(Axis axis){
     	if (axis.isVisible){
 	    	parent.fill(0);
 	    	parent.line(axis.x, axis.y, axis.maxX, axis.maxY);
-	    	for (float xVal : axis.getTicks()){
-	        	parent.pushMatrix();
-	        	parent.fill(0);
-	        	parent.translate(xVal, relX(axis.tickLen/2));
-	        	parent.rotate(axis.angle + PConstants.PI/2);
-	        	if (axis.uniformTicks){
-	        		parent.line(xVal, relY(0), xVal, relY(axis.tickLen));
-	        	}else{
-	        		parent.line(relX(xVal), relY(0), relX(xVal), relY(axis.tickLen));
-	        	}
-	    		parent.popMatrix();
-	    	}
+    	}
+    	if (axis.isXAxis){
+    		drawXAxis(axis);
+    	}else{
+    		drawYAxis(axis);
     	}
     }
+    
+    /*
+    public void drawAxis(Axis axis){
+    	if (axis.isVisible){
+    		parent.pushMatrix();
+    		parent.translate(axis.x, axis.y);
+        	parent.rotate(axis.angle);
+        	parent.translate(-axis.x, -axis.y);
+	    	parent.fill(0);
+	    	parent.line(axis.x, axis.y, axis.maxX, axis.maxY);
+	    	//System.out.println("Axis line : " + axis.x + " to " + axis.maxX + " " + axis.y + " @ angle " + axis.angle);
+	    	parent.popMatrix();
+	    	if (axis.showTicks){
+		    	for (float xVal : axis.getTicks()){
+		        	parent.pushMatrix();
+		        	parent.fill(0);
+		        	parent.translate(xVal, axis.y + axis.tickLen/2);
+		        	parent.rotate(axis.angle);
+		        	parent.translate(-xVal, -axis.y - axis.tickLen/2);
+		        	if (axis.isXAxis){
+			        	if (axis.uniformTicks){
+			        		parent.line(xVal, relY(0), xVal, axis.y + axis.tickLen);
+			        		//System.out.println(xVal + " " + relY(0) + " " + (axis.y + axis.tickLen) + " " + axis.tickLen);
+				        }else{
+			        		parent.line(relX(xVal), axis.y, relX(xVal), axis.y - axis.tickLen);
+			        		//System.out.println(relY(0) + " " + (axis.y - axis.tickLen) + " " + axis.tickLen);
+			        	}
+		        	}else{
+		        		if (axis.uniformTicks){
+			        		parent.line(axis.x, xVal, axis.x + axis.tickLen, xVal);
+			        		//System.out.println(xVal + " " + relY(0) + " " + (axis.y + axis.tickLen) + " " + axis.tickLen);
+				        }else{
+			        		parent.line(relX(xVal), axis.y, relX(xVal), axis.y - axis.tickLen);
+			        		//System.out.println(relY(0) + " " + (axis.y - axis.tickLen) + " " + axis.tickLen);
+			        	}
+		        	}
+		    		parent.popMatrix();
+		    	}
+	    	}
+    	}
+    }*/
     public void drawAxes(){
     	parent.pushMatrix();
     	parent.fill(0);
