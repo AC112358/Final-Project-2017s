@@ -9,13 +9,15 @@ public class Label {
 	protected boolean visible;
 	protected PFont font;
 	protected int size;
+	protected int constant;
 	
-	public Label(String n, float x, float y){
+	public Label(String n, float x, float y, int c){
 		name = n;
 		this.x = x;
 		this.y = y;
 		visible = true;
 		size = 8;
+		constant = c;
 	}
 	
 	public void setSize(int s){

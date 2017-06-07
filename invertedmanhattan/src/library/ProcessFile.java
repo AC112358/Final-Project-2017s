@@ -67,7 +67,7 @@ public class ProcessFile{
 		}
 		else if (reject > 0){
 			if (pVal > reject){
-				return Math.random() <= prob;
+				return Math.random() < prob;
 			}else{
 				return false;
 			}
@@ -75,7 +75,7 @@ public class ProcessFile{
 		else{
 			reject *= -1;
 			if (pVal < reject){
-				return Math.random() <= prob;	
+				return Math.random() < prob;	
 			}else{
 				return false;	
 			}
@@ -88,6 +88,7 @@ public class ProcessFile{
 		String[] tokens;
 		BufferedReader in = new BufferedReader(new FileReader(file));
 		String line = in.readLine();
+		int numRejected = 0;
 		while (line != null){
 			addToLists = true;
 			tokens = line.split(" ");
@@ -111,8 +112,12 @@ public class ProcessFile{
 				double pVal = Double.parseDouble(tokens[3]);
 				if (addToLists){
 					addToLists = !rejectP(pVal, reject, prob);
+					if (!addToLists){
+						numRejected++;
+					}
+							
 				}
-						
+				
 				if (addToLists){
 					chrs.add(Integer.parseInt(tokens[0]));
 					posns.add(Integer.parseInt(tokens[1]));
@@ -128,6 +133,7 @@ public class ProcessFile{
 			}
 			line = in.readLine();
 		}
+		//System.out.println(numRejected + " rejected");
 		in.close();
 		tenPow = (int)(Math.ceil(Math.log(maxPosn)/Math.log(10)));
 	}
@@ -167,7 +173,7 @@ public class ProcessFile{
   
   
   public float getXPosn(){
-    return (float)fullLengths[getChromosome()] + getPosition()/DIV_BY;//(float)((getChromosome() * Math.pow(10, tenPow) + getPosition())/Math.pow(10, tenPow));
+    return (float)fullLengths[getChromosome() - 1] + getPosition()/DIV_BY;//(float)((getChromosome() * Math.pow(10, tenPow) + getPosition())/Math.pow(10, tenPow));
   }
   
   public int getSize(){

@@ -81,7 +81,7 @@ public class GetLocations {
 		return 24;
 	}
 	
-	public static void main(String[] args) throws NonUniqueException, ConfigurationException, DAOException{
+	/*public static void main(String[] args) throws NonUniqueException, ConfigurationException, DAOException{
 		System.out.println("hi");
 		setUpChrLengths();
 		System.out.println("hi again");
@@ -95,5 +95,5 @@ public class GetLocations {
 				e.printStackTrace();
 			}
 		}
-	}
+	}*/
 }

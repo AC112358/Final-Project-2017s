@@ -24,8 +24,13 @@ public class TestMethods extends PApplet{
 			}
 		}
 		try {
-			c = new Container(this, 500, 500, 50, 50, "someHIP_MEN.txt", "someHIP_MEN.txt");
+			c = new Container(this, 500, 500, 50, 50, "HIP_MEN_chr_pos_rs_pval.txt", "HIP_WOMEN_chr_pos_rs_pval.txt"); //"someHIP_MEN.txt", "someHIP_MEN.txt");  
 			c.setPointColors(colors);
+			c.setBGColor(255);
+			
+			//System.out.println("this is where things get bad");
+			c.setYAxisIntervals(2);
+			//c.rejectValWithProb(0.3f, 1);
 			//System.out.println(c.up.xAxis.isVisible);
 			//c.setBGColor(color(0, 255, 213));
 			//System.out.println("done w/setup");
@@ -33,11 +38,13 @@ public class TestMethods extends PApplet{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		c.drawPlot();
+		c.drawVertLines(color(208, 216, 214));
+		c.drawHorizLine(1, color(180, 70, 53));
 	}
 	
 	public void draw(){
-		c.drawPlot();
-		c.drawHorizLine(1, color(180, 70, 53));
+		
 
 		//c.drawVertLines(color(180, 70, 53));
     	//c.down.yAxis.isVisible = false;

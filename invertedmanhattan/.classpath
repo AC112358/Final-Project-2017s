@@ -3,5 +3,38 @@
 	<classpathentry kind="src" output="bin" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="C:/Users/annca/Downloads/processing-3.3.3-windows64/processing-3.3.3/core/library/core.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/asm-1.5.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/biojava3-core-3.0.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/cglib-2.1_3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/commons-dbcp-1.2.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/commons-pool-1.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/ensembl-config-1.78.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/ensembl-config-1.78-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/ensembl-data-access-1.78.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/ensembl-data-access-1.78-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/ensembl-data-access-1.78-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/ensembl-data-access-interface-1.78.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/ensembl-data-access-interface-1.78-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/ensembl-data-access-interface-1.78-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/ensembl-datamapper-1.78.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/ensembl-datamapper-1.78-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/ensembl-datamapper-1.78-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/ensembl-datasource-aware-model-1.78.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/ensembl-datasource-aware-model-1.78-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/ensembl-datasource-aware-model-1.78-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/ensembl-model-1.78.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/ensembl-model-1.78-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/ensembl-model-1.78-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/ensembl-test-1.78.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/ensembl-test-1.78-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/ensembl-test-1.78-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/google-collections-1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/mybatis-3.0.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/mysql-connector-java-5.1.6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/slf4j-api-1.7.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/slf4j-log4j12-1.7.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Dropbox/Ann/Final-Project-2017s/release1_78/slf4j-nop-1.7.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/annca/Desktop/CS 2017s Project/mysql-connector-java-5.1.42-bin.jar"/>
 	<classpathentry kind="output" path="resources/code"/>
 </classpath>
