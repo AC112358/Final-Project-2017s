@@ -24,10 +24,10 @@ public class TestMethods extends PApplet{
 			}
 		}
 		try {
-			c = new Container(this, 500, 500, 50, 50, "HIP_MEN_chr_pos_rs_pval.txt", "HIP_WOMEN_chr_pos_rs_pval.txt"); //"someHIP_MEN.txt", "someHIP_MEN.txt");  
+			c = new Container(this, 500, 500, 50, 50, "HIP_MEN_chr_pos_rs_pval.txt", "HIP_WOMEN_chr_pos_rs_pval.txt");//"someHIP_MEN.txt", "someHIP_MEN.txt"); //"HIP_MEN_chr_pos_rs_pval.txt", "HIP_WOMEN_chr_pos_rs_pval.txt"); //"someHIP_MEN.txt", "someHIP_MEN.txt");  
 			c.setPointColors(colors);
 			c.setBGColor(255);
-			
+		
 			//System.out.println("this is where things get bad");
 			c.setYAxisIntervals(2);
 			//c.rejectValWithProb(0.3f, 1);
@@ -41,6 +41,8 @@ public class TestMethods extends PApplet{
 		c.drawPlot();
 		c.drawVertLines(color(208, 216, 214));
 		c.drawHorizLine(1, color(180, 70, 53));
+		stroke(0);
+		c.drawAxes();
 	}
 	
 	public void draw(){

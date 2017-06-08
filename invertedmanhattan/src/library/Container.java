@@ -37,6 +37,7 @@ public class Container {
     	//middleLabel.angle = (float)(Math.PI);
     	
     	title = new Label("Inverted Manhattan plot", x + w/2, y, 1);//0, 0);//x + w/2, y);
+    	title.size = 15;
     	
     	up = new Plot(1, x, y, width, height/2);
     	down = new Plot(-1, x, y + height/2, width, height/2);
@@ -63,6 +64,65 @@ public class Container {
     	setScales();
     	initPoints();
     	setHeight((float)(totalY*1.1));
+    }
+    
+    private void moveXLabelsDown(Axis axis, float minDist){
+    	float[] ticks = axis.getTicks();
+    	if (ticks == null || ticks.length == 0){
+    		return;
+    	}
+    	parent.pushStyle();
+    	parent.textSize(8);
+    	if (axis.tickNames != null && axis.tickNames.length > 0 && axis.tickNames[0] != null){
+    		parent.textSize(axis.tickNames[0].size);
+    	}
+    	parent.stroke(0);
+    	float addToY = (float) (0.05 * height);
+    	float xVal = 0;
+    	float xVal2 = 0;
+    	float xVal3 = 0;
+    	boolean proceed = true;
+    	
+    	int len = Math.min(axis.tickNames.length, ticks.length) - 1;
+    	
+    	for (int i = 0; i < len; i += 2){
+    		if (Math.abs(ticks[i+1] - ticks[i]) < minDist/xScale){
+    			xVal = ticks[i+1];
+    			if (!axis.uniformTicks){
+    				xVal = relX(ticks[i+1]);
+    			}
+    			xVal2 = ticks[i];
+    			if (!axis.uniformTicks){
+    				xVal2 = relX(xVal2);
+    			}
+    			if (i + 2 < len){
+	    			xVal3 = ticks[i+2];
+	    			if (!axis.uniformTicks){
+	    				xVal3 = relX(xVal3);
+	    			}
+    			}
+    			
+    			
+    			proceed = xVal2 + parent.textWidth(axis.tickNames[i].name) < xVal;
+    			//System.out.println((xVal2 + parent.textWidth(axis.tickNames[i].name)) + " " + xVal);
+    			proceed = proceed && (i + 2 >= len || xVal3 + parent.textWidth(axis.tickNames[i+2].name) > xVal);
+    			if (proceed){
+		        	parent.line(xVal, axis.y, xVal, axis.y + addToY);
+    			}
+        		axis.tickNames[i+1].y += addToY;
+    		}
+    		
+    	}
+    	parent.popStyle();
+    }
+    
+    public void moveXLabelsDown(){
+    	moveXLabelsDown(up.xAxis);
+    	moveXLabelsDown(down.xAxis);
+    }
+    
+    public void moveXLabelsDown(Axis axis){
+    	moveXLabelsDown(axis, 15);
     }
     
     
@@ -176,7 +236,7 @@ public class Container {
     
     private void updateYScale(){
     	if (totalY != 0){
-    		yScale = (float) (.5*height/totalY);
+    		yScale = (float) (0.5 * height/totalY);
     	}
     }
     
@@ -219,7 +279,7 @@ public class Container {
     		parent.fill(0);
     		for (float xVal : axis.getTicks()){
 	    		if (axis.uniformTicks){
-	        		parent.line(xVal, axis.y, xVal, axis.y + axis.tickLen);
+	        		parent.line(xVal, axis.y, xVal, axis.y - axis.tickLen);
 	        		//System.out.println(xVal + " " + relY(0) + " " + (axis.y + axis.tickLen) + " " + axis.tickLen);
 		        }else{
 	        		parent.line(relX(xVal), axis.y, relX(xVal), axis.y - axis.tickLen);
@@ -386,15 +446,8 @@ public class Container {
     	for (float xVal : up.xAxis.getTicks()){
     		parent.line(relX(xVal), y + height, relX(xVal), y);
     	}
-    	parent.pushStyle();
-    	parent.stroke(0);
-    	parent.fill(0);
-    	drawLabels();
-    	drawAxes();
-    	drawPoints();
-    	drawAxes();
-    	parent.popStyle();
     }
+    
     
     public void drawVertLines(int color){
     	parent.pushStyle();
@@ -428,7 +481,7 @@ public class Container {
     	updateYScale();
     }
     
-    public void drawPlot(){
+    public void drawPlot(boolean moveXLabelsDown){
     	parent.pushMatrix();
     	parent.fill(bgColor);
     	parent.noStroke();
@@ -436,13 +489,28 @@ public class Container {
     	parent.stroke(0);
     	
     	drawVertLines(255);
+    	/*parent.pushStyle();
+    	parent.stroke(0);
     	parent.fill(0);
     	drawLabels();
-    	
+    	drawAxes();
+    	drawPoints();
+    	drawAxes();
+    	parent.popStyle();*/
+    	parent.fill(0);
+    	if (moveXLabelsDown){
+    		moveXLabelsDown(down.xAxis);
+    	}
+    	drawLabels();
+
     	parent.stroke(0);
     	drawAxes();
     	drawPoints();
     	drawAxes();
     	parent.popMatrix();
+    }
+    
+    public void drawPlot(){
+    	drawPlot(true);
     }
 }
