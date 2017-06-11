@@ -21,7 +21,7 @@ Bugs/Issues:
 - Basically only can display a specific type of inverted Manhattan plot
 - I should've added more public methods, like change the size of the title
 - Title is displayed strangely (not in the middle)
-- Exceptions (FileNotFoundException) can be displayed; hower, I think this is OK since it's a Processing library & the user would want to see that output
+- Exceptions (FileNotFoundException) can be displayed; however, I think this is OK since it's a Processing library & the user would want to see that output
 
 Potential added features:
 - Make more user-friendly
@@ -29,13 +29,20 @@ Potential added features:
 
 General description: This project is a Processing library that allows the user to create inverted Manhattan plots. It was made specifically for genetic studies. 
 A Manhattan Plot displays the location of a gene and the -log base 10 of its p value. The p value is the probability that the null hypothesis (the gene & the trait being studied are not correlated) is true. The smaller it is, the more correlated the gene & trait are. 
-I was influenced/inspired by the Grafica Processing library & Assocplots (a Python library) and used a GitHub Processing library setup tutorial.
+I was influenced/inspired by the Grafica Processing library (I based some of my class names/structure on it) & Assocplots (a Python library) (I tried to include features & style in Assocplots) and used a GitHub Processing library setup tutorial.
 
 HOW TO USE: 
-1. Get the invertedmanhattan-1 folder: invertedmanhattandistribution --> invertedmanhattan-1
-  The file invertedmanhattan.jar should be there.
+1. Get the invertedmanhattan-1 folder: invertedmanhattan --> distribution --> invertedmanhattan-1 (copy the entire folder)
 
-2. Move the JAR to your Processing library folder: Documents --> Processing --> libraries
-  (Documents\Processing\libraries)
-  
-  
+2. Move the folder to your Processing library folder: Documents --> Processing --> libraries: in the libraries folder, copy the  invertedmanhattan-1 folder
+
+3. Open Processing (restart it if it was already open). 
+Sketch (in the top bar next to "File" & "Edit") --> Import Library --> Contributed (in gray near the bottom) --> invertedmanhattan-1 --> 
+ Inverted Manhattan Plot
+  
+4. Call my methods (see TestingPlot.pde in the folder TestingPlot in Final-Project-2017s for an example)
+
+IMPORTANT: You can go to invertedmanhattan --> src --> library to see all the Java files used in the library. There are others I made (HelloExample is not one of them; it came with the tutorial project I downloaded and I kept it in case I needed reference). The other ones I made were going to be used to get the location of a given gene using its rsID, but that didn't end up working out. 
+I tried using an API and uploading the reference file to a HashTable and later to a database. None of these approaches worked. I researched a bit on using Entrez API, but it seems easier to use a pre-existing program to first get the locations of genes. I think there are easier tools on Python.
+
+I was away for a family event over the weekend, and I only really had free time on the train back (I studied for Regents on the way there). That's why I unevenly worked over the weekend.
