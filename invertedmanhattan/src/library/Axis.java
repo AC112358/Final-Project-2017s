@@ -16,6 +16,8 @@ public class Axis {
 	protected boolean showTicks;
 	protected float major1, major2;
 	protected int constant;
+	protected boolean useCoordsAsNames;
+	protected static float roundVal = 0.05f;
 	
 	//protected static float axisLabelMargin = 4;
 	protected static float xAxisTickNameMargin = -10;
@@ -39,6 +41,7 @@ public class Axis {
 			major1 = x;
 			major2 = maxX;
 		}
+		useCoordsAsNames = true;
 	}
 	
 	public boolean setNTicks(int n){
@@ -62,6 +65,7 @@ public class Axis {
 			}
 		}
 		if (tickNames == null){
+			useCoordsAsNames = true;
 			setTickNamesToTickVal();
 		}
 		return true;
@@ -75,6 +79,7 @@ public class Axis {
 	}
 	
 	public void setNonuniformTickNamesToTickVal(){
+		useCoordsAsNames = true;
 		tickNames = new Label[ticks.length];
 		for (int i = 0; i < ticks.length; i++){
 			tickNames[i] = makeTickName(i, customRound(ticks[i]));
@@ -87,7 +92,7 @@ public class Axis {
 	}
 	
 	protected static String customRound(float f){
-		return "" + (int)Math.floor(f + 0.05);
+		return "" + (int)Math.floor(f + roundVal);
 	}
 	
 	private float getXVal(float tickVal){
@@ -134,6 +139,7 @@ public class Axis {
 	}
 	
 	public void setTickNames(String[] names){
+		useCoordsAsNames = false;
 		int i = 0;
 		while (i < names.length && i < ticks.length){
 			i++;

@@ -8,9 +8,9 @@ public class Plot implements PConstants{
     protected Label trait;
     protected float scale;
     protected Axis xAxis, yAxis;
-    protected ArrayList<Point> points;
+    protected Point[] points;
     protected float x, y, width, height;
-    private static float marginX = 3, marginY = 3;
+    private static float marginX = 40, marginY = 40;
     
     protected ProcessFile pF;
     //public Axis(float marginX, float marginY, int x1, int y1, int x2, int y2, int angle){
@@ -20,10 +20,9 @@ public class Plot implements PConstants{
     	trait = new Label("", (float)(x + .75*w), (float)(y + h/2 - constant*0.25*h), constant);
     	width = w;
     	height = h;
-    	points = new ArrayList<Point>();
-    	xAxis = new Axis(marginX, 0, x, y+height, x+width, y+height, 0, constant);
+    	xAxis = new Axis(0, marginY, x, y+height, x+width, y+height, 0, constant);
     	
-    	yAxis = new Axis(0, marginY, x, y, x, y+height, PConstants.PI/2, constant);
+    	yAxis = new Axis(marginX, 0, x, y, x, y+height, PConstants.PI/2, constant);
     	//yAxis = new Axis(marginX, marginY, y, y+height, y+height, y+height, 3*PConstants.PI/2);
     	xAxis.tickLen = height/100;
     	yAxis.tickLen = width/100;
@@ -34,14 +33,17 @@ public class Plot implements PConstants{
     	trait = t;
     }*/
     
-    public void addPoint(Point p){
+    /*public void addPoint(Point p){
     	points.add(p);
-    }
+    }*/
     
     public void addPoints(){
-    	while (pF.hasNext()){
-    		points.add(new Point(pF.getXPosn(), pF.getLogP(), pF.getChromosome(), constant));
+    	points = new Point[pF.getSize()];
+    	int i = 0;
+    	while (i < points.length){
+    		points[i] = new Point(pF.getXPosn(), pF.getLogP(), pF.getChromosome(), constant);
     		pF.advanceIndex();
+    		i++;
     	}
     	//System.out.println("added points");
     }

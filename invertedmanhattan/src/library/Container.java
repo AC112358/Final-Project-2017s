@@ -1,6 +1,7 @@
 package library;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
@@ -13,16 +14,21 @@ public class Container {
     private int bgColor;
     private float xScale;
     private float yScale;
-    private boolean drawLabels;
+    //private boolean drawLabels;
     private Label title, middleLabel;
     private float middleLabelMargin = 5;
     private double totalY;
+    private static int defaultMarkedColor = 0;
     
     public Container(PApplet p, float w, float h, float x, float y, String fName1, String fName2) throws IOException{
-    	this(p, w, h, x, y, fName1, fName2, 0, 0);
+    	this(p, w, h, x, y, fName1, fName2, 0, 0, false, false);
     }
     
-    public Container(PApplet p, float w, float h, float x, float y, String fName1, String fName2, float reject, float prob) throws IOException{
+    public Container(PApplet p, float w, float h, float x, float y, String fName1, String fName2, boolean showErrorMsgs) throws IOException{
+    	this(p, w, h, x, y, fName1, fName2, 0, 0, showErrorMsgs, false);
+    }
+    
+    public Container(PApplet p, float w, float h, float x, float y, String fName1, String fName2, float reject, float prob, boolean showErrorMsgs, boolean sortGeneList) throws IOException{
     	parent = p;
     	
     	width = w;
@@ -41,8 +47,8 @@ public class Container {
     	
     	up = new Plot(1, x, y, width, height/2);
     	down = new Plot(-1, x, y + height/2, width, height/2);
-    	up.pF = new ProcessFile(fName1, reject, prob);
-    	down.pF = new ProcessFile(fName2, reject, prob);
+    	up.pF = new ProcessFile(fName1, reject, prob, showErrorMsgs, sortGeneList);
+    	down.pF = new ProcessFile(fName2, reject, prob, showErrorMsgs, sortGeneList);
     	//down.xAxis.isVisible = false;
     	up.xAxis.setTicks(ProcessFile.fullLengths);
     	down.xAxis.setTicks(ProcessFile.fullLengths);
@@ -77,7 +83,7 @@ public class Container {
     		parent.textSize(axis.tickNames[0].size);
     	}
     	parent.stroke(0);
-    	float addToY = (float) (0.05 * height);
+    	float addToY = Math.max((float) (0.03 * height), 9);
     	float xVal = 0;
     	float xVal2 = 0;
     	float xVal3 = 0;
@@ -103,9 +109,9 @@ public class Container {
     			}
     			
     			
-    			proceed = xVal2 + parent.textWidth(axis.tickNames[i].name) < xVal;
+    			proceed = xVal2 + parent.textWidth(axis.tickNames[i].name)/2 < xVal;
     			//System.out.println((xVal2 + parent.textWidth(axis.tickNames[i].name)) + " " + xVal);
-    			proceed = proceed && (i + 2 >= len || xVal3 + parent.textWidth(axis.tickNames[i+2].name) > xVal);
+    			proceed = proceed && (i + 2 >= len || xVal3 + parent.textWidth(axis.tickNames[i+2].name)/2 > xVal);
     			if (proceed){
 		        	parent.line(xVal, axis.y, xVal, axis.y + addToY);
     			}
@@ -139,10 +145,10 @@ public class Container {
     
     
     public void rejectValWithProb(float reject, float prob) throws IOException{
-    	up.pF = new ProcessFile(up.pF.name, reject, prob);
-    	down.pF = new ProcessFile(down.pF.name, reject, prob);
-    	up.points.clear();
-    	down.points.clear();
+    	up.pF = new ProcessFile(up.pF.name, reject, prob, up.pF.verbose, up.pF.sortGeneList);
+    	down.pF = new ProcessFile(down.pF.name, reject, prob, down.pF.verbose, up.pF.sortGeneList);
+    	up.points = null;
+    	down.points = null;
     	setScales();
     	initPoints();
     	setHeight((float)(totalY*1.1));
@@ -210,6 +216,30 @@ public class Container {
     	axis.setNonuniformTickNamesToTickVal();
     }
     
+    private void markPoint(Plot plot, String rsID){
+    	if (plot.pF.sortGeneList){
+    		int index = InfoNodeArray.binarySearch(plot.pF.infoNodes, rsID);
+	    	if (index >= 0 && index < plot.points.length && rsID.equals(plot.pF.getRsId(index))){
+	    		plot.points[index].visibility = 1;
+	    		//System.out.println(plot.pF.getChromosome(index));
+	    	}
+    	}else{
+    		for (int i = 0; i < plot.pF.getSize(); i++){
+    			if (plot.pF.getRsId(i).equals(rsID)){
+    				plot.points[i].visibility = 1;
+    			}
+    		}
+    	}
+    }
+    
+    public void markUpperPoint(String rsID){
+    	markPoint(up, rsID);
+    }
+    
+    public void markLowerPoint(String rsID){
+    	markPoint(down, rsID);
+    }
+    
     
     private void makeMiddleLabel(){
 		float xLocn = 0;
@@ -257,14 +287,40 @@ public class Container {
     }
     
     private void drawPoints(Plot plt){
-    	parent.pushMatrix();
+    	parent.pushStyle();
     	parent.noStroke();
     	for (Point p : plt.points){
-    		int color = p.getColor();
-    		parent.fill(color);
-    		parent.ellipse(relX(p.xRel), relY(p.constant * p.yRel), p.getRadius(), p.getRadius());
+    		if (p.visibility == 0){
+	    		int color = p.getColor();
+	    		parent.fill(color);
+	    		parent.ellipse(relX(p.xRel), relY(p.constant * p.yRel), p.getRadius(), p.getRadius());
+    		}
+    		else if (p.visibility == 1){
+    			//parent.pushStyle();
+        		/*parent.fill(0xFF0000);
+        		parent.rect(relX(p.xRel) - p.getRadius(), relY(p.constant * p.yRel) + p.constant*3, 
+        				relX(p.xRel) + p.getRadius(), relY(p.yRel) - p.constant*3);*/
+        		//System.out.print((relX(p.xRel) - p.getRadius()) + "  " + relY(p.constant * p.yRel) + p.constant*3);
+        		//System.out.println(" " + (relX(p.xRel) + p.getRadius()) + " " + (relY(p.yRel) - p.constant*3));
+        		/*parent.rect(relX(p.xRel) - 3, relY(p.yRel) - p.getRadius(), 
+        				relX(p.xRel) + 3, relY(p.yRel) + p.getRadius());*/
+    			parent.fill(defaultMarkedColor);
+    			float rt3 = (float) Math.sqrt(3);
+    			float pX = relX(p.xRel);
+    			float pY = relY(p.constant*p.yRel);
+    			parent.triangle(pX - 1.5f*(p.getRadius()*rt3/2), pY + 1.5f*p.getRadius()/2, 
+    					pX + 1.5f*(p.getRadius()*rt3/2), pY + 1.5f*p.getRadius()/2, pX, pY - p.getRadius()*1.5f);
+    			//System.out.println(x - p.getRadius()*rt3 + " " +  y + p.getRadius()/2);
+    			//System.out.println(x + p.getRadius()*rt3 + " " + );
+    			
+        		//parent.popStyle();
+        		//parent.ellipse(relX(p.xRel), relY(p.constant * p.yRel), 100, 100);
+        		//System.out.println(p.getRadius());
+        		//parent.rect(relX(p.xRel) - p.getRadius(), relY(p.constant * p.yRel), relX(p.xRel) + p.getRadius(), relY(p.constant*p.yRel));
+        		
+    		}
     	}	
-    	parent.popMatrix();
+    	parent.popStyle();
     }
     
     public void drawPoints(){
@@ -272,6 +328,14 @@ public class Container {
     	drawPoints(down);
     }
     
+    public static void setMarkedColor(int color){
+    	defaultMarkedColor = color;
+    }
+    
+    
+    public void setXAxisName(String name){
+    	down.xAxis.name.name = name;
+    }
     
     public void drawXAxis(Axis axis){
 		parent.pushStyle();
@@ -318,6 +382,15 @@ public class Container {
     	}else{
     		drawYAxis(axis);
     	}
+    }
+    
+    public void setTitle(String name){
+    	title.name = name;
+    }
+    
+    public void roundToNthPlace(int n){
+       	float toRound = (float) (Math.pow(10, n)/20.0);
+    	Axis.roundVal = toRound;
     }
     
     /*
@@ -383,17 +456,17 @@ public class Container {
     		drawLabel(l, up.xAxis.uniformTicks, true);
     	}*/
     	for (Label l : down.xAxis.tickNames){
-    		drawLabel(l, down.xAxis.uniformTicks, true);
+    		drawLabel(l, down.xAxis.uniformTicks, true, down.xAxis.useCoordsAsNames);
     	}
     	for (Label l : up.yAxis.tickNames){
-    		drawLabel(l, up.yAxis.uniformTicks, false);
+    		drawLabel(l, up.yAxis.uniformTicks, false, up.yAxis.useCoordsAsNames);
     	}
     	for (Label l : down.yAxis.tickNames){
-    		drawLabel(l, down.yAxis.uniformTicks, false);
+    		drawLabel(l, down.yAxis.uniformTicks, false, down.yAxis.useCoordsAsNames);
     	}
     }
     
-    private void drawLabel(Label label, boolean uniform, boolean isX){
+    private void drawLabel(Label label, boolean uniform, boolean isX, boolean useCoordsAsNames){
     	if (label.isVisible() && label.name != null){
 	    	parent.pushMatrix();
 	    	parent.translate(label.x, label.y);
@@ -405,30 +478,45 @@ public class Container {
 	    	}
 	    	//System.out.println(label.name + " " + label.x + " " + label.y);
 	    	if (uniform){
-	    		try{
+	    		if (!useCoordsAsNames){
+	    			parent.text(label.name, label.x, label.y);
+	    		}else{
 	    			if (isX){
-	    				parent.text(Axis.customRound(revRelX(label.x, label.constant)), label.x, label.y);
+	    				parent.text(Axis.customRound(revRelX(label.x, label.constant)), centeredLabel(label, label.x, isX), label.y);
 	    			}else{
-	    				parent.text(Axis.customRound(revRelY(label.y, label.constant)), label.x, label.y);
+	    				parent.text(Axis.customRound(revRelY(label.y, label.constant)), centeredLabel(label, label.x, isX), label.y);
 	    				//System.out.println(Axis.customRound(revRelY((float)Double.parseDouble(label.name), label.constant)) + " " + label.constant + " " + ((float)Double.parseDouble(label.name)-(y+height/2)));
 	    			}
 	    		}
-	    		catch(NumberFormatException e){
-	    			parent.text(label.name, label.x, label.y);
-	    		}
 	    		//System.out.println(label.name + " " + label.x + " " + label.y);
 	    	}else{
+	    		 //private float centeredLabel(Label l, float val, boolean isX){
 	    		if (isX){
-	    			parent.text(label.name, relX(label.x), label.y);
-	    		}else{
-	    			parent.text(label.name, label.x, relY(label.constant * label.y));
-	    			//System.out.println(label.name + " " + label.x + " " + label.y + " " + relY(label.y));
-	    		}
+		    		parent.text(label.name, centeredLabel(label, relX(label.x), isX), label.y);
+		    	}else{
+		    		parent.text(label.name, label.x, centeredLabel(label, relY(label.constant * label.y), isX));
+		    		//System.out.println(label.name + " " + label.x + " " + label.y + " " + relY(label.y));
+		    	}
 	    		//System.out.println(label.name + " " + relX(label.x) + " " + relY(label.y));
 	    	}
 	    	parent.popMatrix();
     	}
     }
+    
+    public Axis getUpperXAxis(){
+    	return up.xAxis;
+    }
+    public Axis getLowerXAxis(){
+    	return down.xAxis;
+    }
+    public Axis getLowerYAxis(){
+    	return down.yAxis;
+    }
+    public Axis getUpperYAxis(){
+    	return up.yAxis;
+    }
+    
+    
     
     private void drawLabel(Label label){
     	parent.pushMatrix();
@@ -457,16 +545,40 @@ public class Container {
     }
     
     
-    public void drawHorizLine(float yVal){
+    public void drawHorizLine(float yVal, boolean labelYAxis){
     	parent.line(x, relY(yVal), x + width, relY(yVal));
+    	if (labelYAxis){
+    		Label horizName = new Label(Axis.customRound(yVal), x - Axis.yAxisTickNameMargin, relY(yVal), 0);
+    		drawLabel(horizName);
+    	}
+    }
+    
+    public void drawHorizLine(float yVal){
+    	drawHorizLine(yVal, false);
     }
     
     public void drawHorizLine(float y, int color){
+    	drawHorizLine(y, color, false);
+    }
+    
+    public void drawHorizLine(float y, int color, boolean labelYAxis){
     	parent.pushMatrix();
     	parent.stroke(color);
-    	drawHorizLine(y);
+    	drawHorizLine(y, labelYAxis);
     	parent.popMatrix();
     }
+    
+    private float centeredLabel(Label l, float val, boolean isX){
+    	parent.pushStyle();
+    	parent.textSize(l.size);
+    	int constant = -1;
+    	if (isX){
+    		constant = 1;
+    	}
+    	parent.popStyle();
+    	return (float) (val - constant*parent.textWidth(l.name)/2.);
+    }
+    
     
     public void setBGColor(int color){
     	bgColor = color;
@@ -480,6 +592,7 @@ public class Container {
     	totalY = height;
     	updateYScale();
     }
+    
     
     public void drawPlot(boolean moveXLabelsDown){
     	parent.pushMatrix();

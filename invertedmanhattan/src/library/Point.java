@@ -7,12 +7,14 @@ public class Point {
 	private Label label;
 	protected int constant;
 	protected int chromosome;
+	protected int visibility;
 	
 	public Point(float x, float y){
 		xRel = x;
 		yRel = y;
 		radius = 3;
 		constant = 1;
+		visibility = 0; //0: visible, 1: marked, else: invisible
 	}
 	
 	public Point(float x, float y, int chr, int c){
