@@ -31,7 +31,7 @@ General description: This project is a Processing library that allows the user t
 A Manhattan Plot displays the location of a gene and the -log base 10 of its p value. The p value is the probability that the null hypothesis (the gene & the trait being studied are not correlated) is true. The smaller it is, the more correlated the gene & trait are. 
 I was influenced/inspired by the Grafica Processing library (I based some of my class names/structure on it) & Assocplots (a Python library) (I tried to include features & style in Assocplots) and used a GitHub Processing library setup tutorial.
 
-HOW TO USE: 
+HOW TO USE (NOTE: I used Java 8): 
 1. Get the invertedmanhattan-1 folder: invertedmanhattan --> distribution --> invertedmanhattan-1 (copy the entire folder)
 
 2. Move the folder to your Processing library folder: Documents --> Processing --> libraries: in the libraries folder, copy the  invertedmanhattan-1 folder
